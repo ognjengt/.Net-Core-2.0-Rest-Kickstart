@@ -1,5 +1,8 @@
-# .Net-Core-2.0-Rest-Kickstart
-Everything you need to build scalable .Net Core 2.0 Rest API
+# .Net Core Rest API Kickstart
+Foundation for building your next .Net Core Rest API with scalability in mind.
+Kickstart into your next project.
+
+<br>
 Todo:
 - Add JWT Authentication
 - Add Repository pattern + Interfaces
