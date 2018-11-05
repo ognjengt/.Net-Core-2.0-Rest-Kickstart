@@ -11,3 +11,4 @@ Todo:<br>
 - Login and register endpoints to finish
 - CORS
 - Custom Attributes
+- Unit tests
