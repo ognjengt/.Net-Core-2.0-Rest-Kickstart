@@ -1,4 +1,5 @@
 ﻿using Microsoft.IdentityModel.Tokens;
+using Server.Helpers;
 using Server.Models;
 using Server.Repositories.Interfaces;
 using System;
@@ -13,8 +14,17 @@ namespace Server.Repositories.Implementations
 {
     public class AuthentificationRepository : IAuthentificationRepository
     {
-        public string CreateToken(User user)
+        MongoDriver _mongoDriver;
+        IUserRepository _userRepository = new UserRepository();
+
+        public AuthentificationRepository(MongoDriver driverInstance)
         {
+            _mongoDriver = driverInstance;
+        }
+
+        public Response<string> CreateToken(User user)
+        {
+            // Create claims for the payload body
             var claimsData = new List<Claim>();
             claimsData.Add(new Claim("Email", user.Email));
             claimsData.Add(new Claim("FullName", user.FullName));
@@ -23,25 +33,48 @@ namespace Server.Repositories.Implementations
             // For more information, look up secrets.json in .Net Core projects.
             string secret = "your_secret_here";
 
+            // Create key
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secret));
             var signInCredentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256Signature);
 
+            // Create token
             var token = new JwtSecurityToken(
                 issuer: "localhost",
                 expires: DateTime.Now.AddYears(1),
                 claims: claimsData,
                 signingCredentials: signInCredentials
             );
+
             var tokenString = new JwtSecurityTokenHandler().WriteToken(token);
-            return tokenString.ToString();
+            return new Response<string>().Success("Token successfully created.", tokenString.ToString());
         }
 
-        public Task<string> Register(User user)
+        public async Task<Response<bool>> Register(User user)
         {
-            throw new NotImplementedException();
+            Response<bool> response = new Response<bool>();
+
+            // Check if user with this email already exists
+            var existingUser = await _userRepository.GetUserByEmail(user.Email);
+
+            if (existingUser != null)
+                return response.Failed("User already exists.", false);
+
+            // Populate other properties
+            user.SignUpDate = DateTime.Now;
+            user.Password = PasswordCrypter.CryptPassword(user.Password);
+
+            try
+            {
+                await _mongoDriver.UsersCollection.InsertOneAsync(user);
+                return response.Success("User successfully created.", true);
+            }
+            catch (Exception)
+            {
+                return response.Failed("Could not create user.", false);
+            }
         }
 
-        public Task<string> SignIn(User user)
+        public Task<Response<bool>> SignIn(User user)
         {
             throw new NotImplementedException();
         }

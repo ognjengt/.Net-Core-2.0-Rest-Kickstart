@@ -13,20 +13,20 @@ namespace Server.Repositories.Interfaces
         /// </summary>
         /// <param name="user">User containing email and password</param>
         /// <returns>AuthentificationResult containing Json Web Token</returns>
-        Task<string> SignIn(User user);
+        Task<Response<bool>> SignIn(User user);
 
         /// <summary>
         /// Registers a new user
         /// </summary>
         /// <param name="user"></param>
         /// <returns>AuthentificationResult containing message if the registration was sucessfull</returns>
-        Task<string> Register(User user);
+        Task<Response<bool>> Register(User user);
 
         /// <summary>
         /// Creates a Json Web Token
         /// </summary>
         /// <param name="user">User containing information which needs to be stored</param>
         /// <returns>Json Web Token</returns>
-        string CreateToken(User user);
+        Response<string> CreateToken(User user);
     }
 }

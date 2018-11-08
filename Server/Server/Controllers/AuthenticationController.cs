@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Server.Models;
-using Server.Models.Responses;
 
 namespace Server.Controllers
 {
@@ -16,11 +15,11 @@ namespace Server.Controllers
     {
         [HttpPost("signin")]
         [AllowAnonymous]
-        public async Task<AuthentificationResult> SignIn(User user)
+        public async Task<Response<string>> SignIn(User user)
         {
-            AuthentificationResult response = new AuthentificationResult();
+            Response<string> response = new Response<string>();
 
-            return response.Success("test", null);
+            return response.Success("test", "testtoken");
         }
     }
 }

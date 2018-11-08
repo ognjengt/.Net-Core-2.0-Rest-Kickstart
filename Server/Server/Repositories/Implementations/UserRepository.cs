@@ -11,17 +11,27 @@ namespace Server.Repositories.Implementations
     public class UserRepository : IUserRepository
     {
 
-        public Task<User> GetUser(string email)
+        public Task<Response<User>> GetUserById(ObjectId id)
         {
             throw new NotImplementedException();
         }
-        
-        public Task<bool> SaveUser(User user)
+
+        public Task<Response<User>> GetUserByEmail(string email)
+        {
+            return null;
+        }
+
+        public Task<Response<User>> SaveUser(User user)
         {
             throw new NotImplementedException();
         }
-        
-        public Task<bool> DeleteUser(ObjectId id)
+
+        public Task<Response<bool>> DeleteUserById(ObjectId id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<Response<User>> UpdateUser(User user)
         {
             throw new NotImplementedException();
         }
