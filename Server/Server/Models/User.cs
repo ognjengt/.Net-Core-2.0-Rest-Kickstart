@@ -14,6 +14,8 @@ namespace Server.Models
         public ObjectId Id { get; set; }
         public string FullName { get; set; }
         public string Email { get; set; }
+
+        [MinLength(5)]
         public string Password { get; set; }
         public DateTime SignUpDate { get; set; }
     }

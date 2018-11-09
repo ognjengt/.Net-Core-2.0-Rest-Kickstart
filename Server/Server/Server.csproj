@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Repositories\Tests\" />
+    <Folder Include="Tests\" />
     <Folder Include="wwwroot\" />
   </ItemGroup>
 
