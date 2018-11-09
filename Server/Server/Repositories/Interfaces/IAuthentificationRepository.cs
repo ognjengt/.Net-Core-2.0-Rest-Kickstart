@@ -11,15 +11,15 @@ namespace Server.Repositories.Interfaces
         /// <summary>
         /// Signs the user in
         /// </summary>
-        /// <param name="user">User containing email and password</param>
-        /// <returns>AuthentificationResult containing Json Web Token</returns>
-        Task<Response<bool>> SignIn(User user);
+        /// <param name="user">User with the Email and Password</param>
+        /// <returns>Response object where the data property contains Json Web Token</returns>
+        Task<Response<string>> SignIn(User user);
 
         /// <summary>
         /// Registers a new user
         /// </summary>
-        /// <param name="user"></param>
-        /// <returns>AuthentificationResult containing message if the registration was sucessfull</returns>
+        /// <param name="user">User containing FullName, Email and Password</param>
+        /// <returns>Response object</returns>
         Task<Response<bool>> Register(User user);
 
         /// <summary>
@@ -27,6 +27,6 @@ namespace Server.Repositories.Interfaces
         /// </summary>
         /// <param name="user">User containing information which needs to be stored</param>
         /// <returns>Json Web Token</returns>
-        Response<string> CreateToken(User user);
+        string CreateToken(User user);
     }
 }

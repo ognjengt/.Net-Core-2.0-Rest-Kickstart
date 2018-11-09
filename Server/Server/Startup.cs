@@ -58,7 +58,7 @@ namespace Server
             });
 
             // Connection to MongoDB, provide database connection string and databaseName
-            MongoDriver.MongoDriverInstance.ConnectToDB("connectionString", "databaseName");
+            MongoDriver.MongoDriverInstance.ConnectToDB("mongodb://localhost:27017", "NetCoreKickstart");
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }

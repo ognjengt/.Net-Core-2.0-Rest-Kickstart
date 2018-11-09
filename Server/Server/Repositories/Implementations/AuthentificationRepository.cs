@@ -14,15 +14,10 @@ namespace Server.Repositories.Implementations
 {
     public class AuthentificationRepository : IAuthentificationRepository
     {
-        MongoDriver _mongoDriver;
         IUserRepository _userRepository = new UserRepository();
+        MongoDriver _mongoDriver = MongoDriver.MongoDriverInstance;
 
-        public AuthentificationRepository(MongoDriver driverInstance)
-        {
-            _mongoDriver = driverInstance;
-        }
-
-        public Response<string> CreateToken(User user)
+        public string CreateToken(User user)
         {
             // Create claims for the payload body
             var claimsData = new List<Claim>();
@@ -46,7 +41,7 @@ namespace Server.Repositories.Implementations
             );
 
             var tokenString = new JwtSecurityTokenHandler().WriteToken(token);
-            return new Response<string>().Success("Token successfully created.", tokenString.ToString());
+            return tokenString.ToString();
         }
 
         public async Task<Response<bool>> Register(User user)
@@ -54,7 +49,7 @@ namespace Server.Repositories.Implementations
             Response<bool> response = new Response<bool>();
 
             // Check if user with this email already exists
-            var existingUser = await _userRepository.GetUserByEmail(user.Email);
+            var existingUser = await _userRepository.GetUserByEmail(user.Email, false);
 
             if (existingUser != null)
                 return response.Failed("User already exists.", false);
@@ -65,7 +60,7 @@ namespace Server.Repositories.Implementations
 
             try
             {
-                await _mongoDriver.UsersCollection.InsertOneAsync(user);
+                await _userRepository.SaveUser(user);
                 return response.Success("User successfully created.", true);
             }
             catch (Exception)
@@ -74,9 +69,24 @@ namespace Server.Repositories.Implementations
             }
         }
 
-        public Task<Response<bool>> SignIn(User user)
+        public async Task<Response<string>> SignIn(User user)
         {
-            throw new NotImplementedException();
+            Response<string> response = new Response<string>();
+
+            // Get the user from the database, check if he actually exists
+            var matchingUser = await _userRepository.GetUserByEmail(user.Email, false);
+
+            if (matchingUser == null)
+                return response.Failed("User does not exist.", "Failed request");
+
+            // User with this email exists, now check his password
+            if (!PasswordCrypter.ValidatePassword(user.Password, matchingUser.Password))
+                return response.Failed("Invalid password.", "Failed request");
+
+            // Generate token
+            // We pass in the matchingUser, since it is a record fron the DB containing all of the fields that will go into claims
+            return response.Success("Successfully signed in.", CreateToken(matchingUser));
+
         }
     }
 }
