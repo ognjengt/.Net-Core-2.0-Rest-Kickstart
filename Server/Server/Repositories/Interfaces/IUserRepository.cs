@@ -13,17 +13,15 @@ namespace Server.Repositories.Interfaces
         /// Returns a user with the provided id
         /// </summary>
         /// <param name="id">Id of the user</param>
-        /// <param name="hidePassword">Boolean that specifies whether to remove the users password from the response</param>
         /// <returns></returns>
-        Task<User> GetUserById(ObjectId id, bool hidePassword);
+        Task<User> GetUserById(ObjectId id);
 
         /// <summary>
         /// Returns a user with the provided email
         /// </summary>
         /// <param name="email">Users email</param>
-        /// <param name="hidePassword">Boolean that specifies whether to remove the users password from the response</param>
         /// <returns></returns>
-        Task<User> GetUserByEmail(string email, bool hidePassword);
+        Task<User> GetUserByEmail(string email);
 
         /// <summary>
         /// Saves the user in the database collection

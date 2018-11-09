@@ -14,25 +14,15 @@ namespace Server.Repositories.Implementations
     {
         MongoDriver _mongoDriver = MongoDriver.MongoDriverInstance;
 
-        public async Task<User> GetUserById(ObjectId id, bool hidePassword)
+        public async Task<User> GetUserById(ObjectId id)
         {
             var user = await _mongoDriver.UsersCollection.Find(u => u.Id == id).SingleOrDefaultAsync();
-            // Remove password from the response for security reasons
-            if (hidePassword && user != null)
-            {
-                user.Password = "";
-            }
             return user;
         }
 
-        public async Task<User> GetUserByEmail(string email, bool hidePassword)
+        public async Task<User> GetUserByEmail(string email)
         {
             var user = await _mongoDriver.UsersCollection.Find(u => u.Email == email).SingleOrDefaultAsync();
-            // Remove password from the response for security reasons
-            if (hidePassword && user != null)
-            {
-                user.Password = "";
-            }
             return user;
         }
 

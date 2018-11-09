@@ -24,7 +24,9 @@ namespace Server.Controllers
         public async Task<Response<User>> GetUserById([FromRoute]string id)
         {
             Response<User> response = new Response<User>();
-            User user = await _userRepository.GetUserById(ObjectId.Parse(id), true);
+            User user = await _userRepository.GetUserById(ObjectId.Parse(id));
+            // Remove password from the response for security reasons
+            user.Password = "";
 
             if (user != null) return response.Success("Success", user);
             else return response.Failed("User does not exist.", null);
@@ -35,7 +37,8 @@ namespace Server.Controllers
         public async Task<Response<User>> GetUserByEmail(string email)
         {
             Response<User> response = new Response<User>();
-            User user = await _userRepository.GetUserByEmail(email, true);
+            User user = await _userRepository.GetUserByEmail(email);
+            user.Password = "";
 
             if (user != null) return response.Success("Success", user);
             else return response.Failed("User does not exist.", null);
@@ -53,7 +56,7 @@ namespace Server.Controllers
             // Then you can put [Authorize(Policy = "AdminOnly")] to this endpoint
             string requesterEmail = TokenHandler.GetClaimFromToken("Email", Request.Headers["Authorization"].ToString().Split(' ')[1]);
 
-            User checkingUser = await _userRepository.GetUserById(ObjectId.Parse(id), true);
+            User checkingUser = await _userRepository.GetUserById(ObjectId.Parse(id));
             if (checkingUser == null)
                 return response.Failed("User does not exist.", false);
 
@@ -78,7 +81,7 @@ namespace Server.Controllers
             // Then you can put [Authorize(Policy = "AdminOnly")] to this endpoint
             string requesterEmail = TokenHandler.GetClaimFromToken("Email", Request.Headers["Authorization"].ToString().Split(' ')[1]);
 
-            User checkingUser = await _userRepository.GetUserById(ObjectId.Parse(id), true);
+            User checkingUser = await _userRepository.GetUserById(ObjectId.Parse(id));
             if (checkingUser == null)
                 return response.Failed("User does not exist.", null);
 

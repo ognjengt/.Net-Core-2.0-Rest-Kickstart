@@ -49,7 +49,7 @@ namespace Server.Repositories.Implementations
             Response<bool> response = new Response<bool>();
 
             // Check if user with this email already exists
-            var existingUser = await _userRepository.GetUserByEmail(user.Email, false);
+            var existingUser = await _userRepository.GetUserByEmail(user.Email);
 
             if (existingUser != null)
                 return response.Failed("User already exists.", false);
@@ -74,7 +74,7 @@ namespace Server.Repositories.Implementations
             Response<string> response = new Response<string>();
 
             // Get the user from the database, check if he actually exists
-            var matchingUser = await _userRepository.GetUserByEmail(user.Email, false);
+            var matchingUser = await _userRepository.GetUserByEmail(user.Email);
 
             if (matchingUser == null)
                 return response.Failed("User does not exist.", "Failed request");
