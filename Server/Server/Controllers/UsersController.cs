@@ -26,7 +26,8 @@ namespace Server.Controllers
             Response<User> response = new Response<User>();
             User user = await _userRepository.GetUserById(ObjectId.Parse(id));
             // Remove password from the response for security reasons
-            user.Password = "";
+            if(user != null)
+                user.Password = "";
 
             if (user != null) return response.Success("Success", user);
             else return response.Failed("User does not exist.", null);
@@ -38,7 +39,9 @@ namespace Server.Controllers
         {
             Response<User> response = new Response<User>();
             User user = await _userRepository.GetUserByEmail(email);
-            user.Password = "";
+            // Remove password from the response for security reasons
+            if (user != null)
+                user.Password = "";
 
             if (user != null) return response.Success("Success", user);
             else return response.Failed("User does not exist.", null);
