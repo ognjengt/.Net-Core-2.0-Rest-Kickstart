@@ -2,13 +2,14 @@
 Foundation for building your next .Net Core Rest API with scalability in mind.
 Kickstart into your next project.
 <br>
-Todo:<br>
-- Add JWT Authentication
-- Add Repository pattern + Interfaces
+Contains:<br>
+- JWT Authentication
+- Repository pattern + Interfaces
 - MongoDB Communicator
-- Folder structure
+- Scalable Folder structure
 - Password Crypter with bcrypt
-- Login and register endpoints to finish
 - CORS
-- Custom Attributes
+- Custom Middleware Attributes
+
+Todo:
 - Unit tests
